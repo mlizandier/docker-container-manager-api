@@ -1,16 +1,17 @@
 import { Hono } from 'hono'
 import { apiKeyAuth } from './middleware/auth'
 import { DockerService } from './services/docker.service'
+import { containerNameAuthorization } from './middleware/container-auth'
 
 const app = new Hono()
 const dockerService = new DockerService()
 
 // Apply authentication to all routes
 app.use('*', apiKeyAuth())
+app.use("/api/v1/docker/containers/:containerName", containerNameAuthorization())
 
 app.get('/api/v1/docker/containers/:containerName', async (c) => {
   const { containerName } = c.req.param()
-  console.log({ containerName })
   try {
     const container = await dockerService.getContainerInformation(containerName)
     return c.json(container)
