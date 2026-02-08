@@ -1,0 +1,8 @@
+node_modules
+dist
+build
+.next
+coverage
+*.lock
+bun.lock
+downloads

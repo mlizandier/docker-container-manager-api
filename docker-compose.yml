@@ -24,4 +24,7 @@ services:
     image: alpine:latest
     container_name: dummy-container
     command: tail -f /dev/null
+    volumes:
+      # Mount downloads folder for file persistence
+      - ./downloads:/downloads
     restart: unless-stopped

@@ -1,6 +1,7 @@
 ## Getting Started
 
 ### Prerequisites
+
 - Docker and Docker Compose
 - Make
 
@@ -16,27 +17,32 @@ SUPABASE_SECRET_KEY=your-supabase-secret-key
 ### Running the Application
 
 First time setup (build and start):
+
 ```sh
 make build
 make start
 ```
 
 Or rebuild and start:
+
 ```sh
 make rebuild
 ```
 
 Start the development server (if already built):
+
 ```sh
 make start
 ```
 
 View logs:
+
 ```sh
 make logs
 ```
 
 Stop the containers:
+
 ```sh
 make down
 ```
@@ -44,6 +50,7 @@ make down
 ### Available Make Commands
 
 Run `make help` to see all available commands:
+
 - `make start` - Start stopped containers
 - `make build` - Build the Docker image
 - `make rebuild` - Rebuild and restart containers
@@ -57,6 +64,7 @@ Run `make help` to see all available commands:
 ### Accessing the API
 
 Once running, the API will be available at:
+
 - http://localhost:3000
 
 All API routes require authentication via `X-API-Key` header or `api_key` query parameter.
