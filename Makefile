@@ -27,9 +27,6 @@ shell: ## Open a shell in the running container
 clean: ## Stop containers and remove volumes
 	docker-compose down -v
 
-dev: ## Build and start containers in foreground (with logs)
-	docker-compose up --build
-
 rebuild: ## Rebuild and restart containers
 	docker-compose up -d --build
 
