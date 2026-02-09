@@ -50,6 +50,10 @@ export class ModsRepository {
 			.single();
 
 		if (error) {
+			if (error.code === "PGRST116") {
+				// No rows returned
+				return null;
+			}
 			throw error;
 		}
 
@@ -97,9 +101,12 @@ export class ModsRepository {
 		);
 
 		if (existing) {
-			return await this.update(existing.id, { is_active: true }, containerName);
-		} else {
-			return await this.create(url, containerName);
+			return await this.update(
+				existing.id,
+				{ is_active: true, updated_at: new Date().toISOString() },
+				containerName
+			);
 		}
+		return await this.create(url, containerName);
 	}
 }

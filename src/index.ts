@@ -14,11 +14,11 @@ const modsService = new ModsService();
 
 app.use("*", apiKeyAuth());
 app.use(
-	"/api/v1/hytale/container/:containerName",
+	"/api/v1/hytale/containers/:containerName",
 	containerNameAuthorization()
 );
 
-app.get("/api/v1/hytale/container/:containerName", async (c) => {
+app.get("/api/v1/hytale/containers/:containerName", async (c) => {
 	const { containerName } = c.req.param();
 	try {
 		const container =
@@ -36,7 +36,7 @@ app.get("/api/v1/hytale/container/:containerName", async (c) => {
 });
 
 app.post(
-	"/api/v1/hytale/container/:containerName",
+	"/api/v1/hytale/containers/:containerName",
 	zValidator("json", actionTypeSchema),
 	async (c) => {
 		const { containerName } = c.req.param();
@@ -67,7 +67,7 @@ app.post(
 );
 
 app.post(
-	"/api/v1/hytale/container/:containerName/mods",
+	"/api/v1/hytale/containers/:containerName/mods",
 	zValidator("json", z.array(curseforgeDownloadUrlSchema)),
 	async (c) => {
 		const { containerName } = c.req.param();
@@ -75,26 +75,17 @@ app.post(
 		const uniqueUrls = Array.from(new Set(body.map((item) => item.url)));
 
 		try {
-			const modsToDownload = await modsService.filterModsToActivate(
-				uniqueUrls,
-				containerName
-			);
-
-			for (const url of modsToDownload) {
-				await dockerService.execCommand(containerName, [
-					"/bin/sh",
-					"-c",
-					`cd downloads && wget "${url}"`,
-				]);
-			}
-
-			await modsService.activateMods(modsToDownload, containerName);
+			const result = await modsService.installMods(uniqueUrls, containerName);
 
 			return c.json({
-				message: `Processing ${modsToDownload.length} mod(s) to download and activate`,
-				mods: modsToDownload,
+				message: `Installed and activated ${result.installed} mod(s)`,
+				mods: result.activated.map((mod) => ({
+					url: mod.url,
+					id: mod.id,
+				})),
 			});
 		} catch (error) {
+			console.error(error);
 			return c.json(
 				{
 					error:
@@ -108,7 +99,7 @@ app.post(
 	}
 );
 
-app.get("/api/v1/hytale/container/:containerName/mods/active", async (c) => {
+app.get("/api/v1/hytale/containers/:containerName/mods/active", async (c) => {
 	const { containerName } = c.req.param();
 	const mods = await modsService.getMods(containerName);
 	return c.json(mods);
