@@ -7,31 +7,31 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 build: ## Build the Docker image
-	docker-compose build
+	docker compose build
 
 up: ## Start the containers
-	docker-compose up -d
+	docker compose up -d
 
 down: ## Stop and remove containers
-	docker-compose down
+	docker compose down
 
 restart: ## Restart the containers
-	docker-compose restart
+	docker compose restart
 
 logs: ## View container logs
-	docker-compose logs -f
+	docker compose logs -f
 
 shell: ## Open a shell in the running container
-	docker-compose exec app /bin/sh
+	docker compose exec app /bin/sh
 
 clean: ## Stop containers and remove volumes
-	docker-compose down -v
+	docker compose down -v
 
 rebuild: ## Rebuild and restart containers
-	docker-compose up -d --build
+	docker compose up -d --build
 
 stop: ## Stop containers without removing them
-	docker-compose stop
+	docker compose stop
 
 start: ## Start stopped containers
-	docker-compose start
+	docker compose start
