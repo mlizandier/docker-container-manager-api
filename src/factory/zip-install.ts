@@ -17,7 +17,7 @@ export class ZipInstall implements ModsInstallInterface {
 		await dockerService.execCommand(containerName, [
 			"/bin/sh",
 			"-c",
-			`cd /downloads && wget -O "${fileName}" "${url}" && unzip -o "${fileName}" -d "${baseName}"`,
+			`cd /server/mods && wget -O "${fileName}" "${url}" && unzip -o "${fileName}" -d "${baseName}"`,
 		]);
 	}
 }

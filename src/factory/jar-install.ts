@@ -12,7 +12,7 @@ export class JarInstall implements ModsInstallInterface {
 		await dockerService.execCommand(containerName, [
 			"/bin/sh",
 			"-c",
-			`cd /downloads && wget -O "${fileName}" "${url}"`,
+			`cd /server/mods && wget -O "${fileName}" "${url}"`,
 		]);
 	}
 }
